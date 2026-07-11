@@ -166,12 +166,14 @@ export default function HomePage() {
                     <div className="qb-input" style={{ overflow: 'visible' }}>
                       <MapPin size={20} className="text-accent" style={{ flexShrink: 0 }} />
                       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                        <AddressAutocomplete 
+                        <input 
+                          type="text"
                           name="heroPickup"
-                          placeholder="Pickup location"
-                          required={false}
+                          placeholder="Pickup location (Tap to open Map)"
                           value={pickupLocation}
-                          onChange={setPickupLocation}
+                          onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                          readOnly
+                          style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer', fontSize: '0.95rem' }}
                         />
                         <button 
                           type="button" 
@@ -188,12 +190,14 @@ export default function HomePage() {
                     <div className="qb-input" style={{ overflow: 'visible' }}>
                       <MapPin size={20} className="text-accent" style={{ flexShrink: 0 }} />
                       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                        <AddressAutocomplete 
+                        <input 
+                          type="text"
                           name="heroDropoff"
-                          placeholder="Drop-off location"
-                          required={false}
+                          placeholder="Drop-off location (Tap to open Map)"
                           value={dropoffLocation}
-                          onChange={setDropoffLocation}
+                          onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                          readOnly
+                          style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer', fontSize: '0.95rem' }}
                         />
                         <button 
                           type="button" 
@@ -563,16 +567,18 @@ export default function HomePage() {
                         style={{ border: 'none', background: 'transparent', flex: 1, padding: '0.75rem', outline: 'none' }}
                       />
                     </div>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', paddingLeft: '2.5rem', marginTop: '-0.5rem', paddingBottom: '0.5rem' }}>
+                    <label className={`same-sender-pill ${sameAsSender ? 'active' : ''}`} style={{ alignSelf: 'flex-start', marginLeft: '2.5rem', marginBottom: '0.5rem' }}>
+                      <div className="pill-knob"></div>
+                      <span>Same as sender</span>
                       <input 
                         type="checkbox" 
                         checked={sameAsSender} 
                         onChange={(e) => {
                           setSameAsSender(e.target.checked);
                           if (e.target.checked) setReceiverPhone(senderPhone);
-                        }} 
+                        }}
+                        style={{ display: 'none' }}
                       />
-                      Same as sender
                     </label>
                   </div>
                   <div className="app-input-row">
