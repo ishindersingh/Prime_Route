@@ -9,7 +9,11 @@ let gunInstance = null;
 const getGun = async () => {
   if (typeof window !== "undefined" && !gunInstance) {
     const Gun = (await import('gun')).default;
-    gunInstance = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+    gunInstance = Gun([
+      'https://gun-manhattan.herokuapp.com/gun',
+      'https://peer.wallie.io/gun',
+      'https://relay.peer.ooo/gun'
+    ]);
   }
   return gunInstance;
 };

@@ -15,8 +15,12 @@ let gunInstance = null;
 const getGun = async () => {
   if (typeof window !== "undefined" && !gunInstance) {
     const Gun = (await import('gun')).default;
-    // Connect to a free community relay server
-    gunInstance = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+    // Connect to a cluster of free community relay servers for global reliability
+    gunInstance = Gun([
+      'https://gun-manhattan.herokuapp.com/gun',
+      'https://peer.wallie.io/gun',
+      'https://relay.peer.ooo/gun'
+    ]);
   }
   return gunInstance;
 };
