@@ -156,18 +156,52 @@ export default function HomePage() {
                 </h1>
                 <p className="hero-subtitle-large">Premium local moving across the GTA.<br/>Transparent pricing. No hidden fees.</p>
                 
-                <div className="hero-quick-book glass-card hover-lift">
+                <div className="hero-quick-book glass-card hover-lift" style={{ overflow: 'visible' }}>
                   <div className="quick-book-inputs">
-                    <div className="qb-input">
-                      <MapPin size={20} className="text-accent" />
-                      <input type="text" placeholder="Pickup location" />
+                    <div className="qb-input" style={{ overflow: 'visible' }}>
+                      <MapPin size={20} className="text-accent" style={{ flexShrink: 0 }} />
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                        <AddressAutocomplete 
+                          name="heroPickup"
+                          placeholder="Pickup location"
+                          required={false}
+                          value={pickupLocation}
+                          onChange={setPickupLocation}
+                        />
+                        <button 
+                          type="button" 
+                          className="map-picker-btn"
+                          style={{ width: '32px', height: '32px' }}
+                          onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                          aria-label="Select pickup location on map"
+                        >
+                          <MapIcon size={16} />
+                        </button>
+                      </div>
                     </div>
                     <div className="qb-divider"></div>
-                    <div className="qb-input">
-                      <MapPin size={20} className="text-accent" />
-                      <input type="text" placeholder="Drop-off location" />
+                    <div className="qb-input" style={{ overflow: 'visible' }}>
+                      <MapPin size={20} className="text-accent" style={{ flexShrink: 0 }} />
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                        <AddressAutocomplete 
+                          name="heroDropoff"
+                          placeholder="Drop-off location"
+                          required={false}
+                          value={dropoffLocation}
+                          onChange={setDropoffLocation}
+                        />
+                        <button 
+                          type="button" 
+                          className="map-picker-btn"
+                          style={{ width: '32px', height: '32px' }}
+                          onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                          aria-label="Select drop-off location on map"
+                        >
+                          <MapIcon size={16} />
+                        </button>
+                      </div>
                     </div>
-                    <a href="#book" className="btn btn-primary qb-btn">Get Quote</a>
+                    <a href="#book" className="btn btn-primary qb-btn">Book Now</a>
                   </div>
                 </div>
                 
