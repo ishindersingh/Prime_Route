@@ -171,6 +171,126 @@ h1, h2, h3, h4, h5, h6 {
     cursor: default;
 }
 
+/* Map Picker Button */
+.map-picker-btn {
+    background: rgba(10, 37, 64, 0.05);
+    border: none;
+    border-radius: var(--radius-sm);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.map-picker-btn:hover {
+    background: rgba(10, 37, 64, 0.1);
+    color: var(--accent);
+}
+
+/* Map Picker Modal */
+.map-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end; /* Bottom sheet on mobile */
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+@media (min-width: 768px) {
+    .map-modal-overlay {
+        align-items: center;
+    }
+}
+
+.map-modal-content {
+    background: white;
+    width: 100%;
+    max-width: 600px;
+    height: 80vh;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+    .map-modal-content {
+        height: 600px;
+        border-radius: var(--radius-lg);
+    }
+}
+
+.map-modal-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+.map-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+}
+.close-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.map-modal-body {
+    flex: 1;
+    position: relative;
+    background: #e2e8f0;
+}
+
+.map-modal-footer {
+    padding: 1rem 1.5rem;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Map center pin logic */
+.center-pin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 1000; /* above leaflet map */
+    pointer-events: none; /* Let dragging pass through */
+    animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -100%); }
+    50% { transform: translate(-50%, calc(-100% - 10px)); }
+}
+
+.map-overlay-address {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    z-index: 1000;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-dark);
+    pointer-events: none;
+}
+
 /* --- Admin Dashboard --- */
 .admin-login-container {
     min-height: 100vh;

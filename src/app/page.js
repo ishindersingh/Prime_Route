@@ -6,9 +6,10 @@ import { motion } from "framer-motion";
 import { 
   Truck, DollarSign, UserCheck, Clock, Shield, 
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
-  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User
+  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
 } from "lucide-react";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
+import MapPickerModal from "@/components/MapPickerModal";
 
 // Animation Variants
 const fadeInUp = {
@@ -29,6 +30,10 @@ export default function HomePage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
+  
+  // Map Modal State
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [mapModalTarget, setMapModalTarget] = useState(""); // 'pickup' or 'dropoff'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -504,23 +509,43 @@ export default function HomePage() {
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    <AddressAutocomplete 
-                      name="bookPickupFallback"
-                      placeholder="Pickup Address (e.g. 100 Queen St W)"
-                      required={true}
-                      value={pickupLocation}
-                      onChange={setPickupLocation}
-                    />
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <AddressAutocomplete 
+                        name="bookPickupFallback"
+                        placeholder="Pickup Address (e.g. 100 Queen St W)"
+                        required={true}
+                        value={pickupLocation}
+                        onChange={setPickupLocation}
+                      />
+                      <button 
+                        type="button" 
+                        className="map-picker-btn"
+                        onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                        aria-label="Select pickup location on map"
+                      >
+                        <MapIcon size={20} />
+                      </button>
+                    </div>
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    <AddressAutocomplete 
-                      name="bookDropoffFallback"
-                      placeholder="Drop-off Address"
-                      required={true}
-                      value={dropoffLocation}
-                      onChange={setDropoffLocation}
-                    />
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <AddressAutocomplete 
+                        name="bookDropoffFallback"
+                        placeholder="Drop-off Address"
+                        required={true}
+                        value={dropoffLocation}
+                        onChange={setDropoffLocation}
+                      />
+                      <button 
+                        type="button" 
+                        className="map-picker-btn"
+                        onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                        aria-label="Select drop-off location on map"
+                      >
+                        <MapIcon size={20} />
+                      </button>
+                    </div>
                   </div>
                   <div className="app-input-row select-row">
                     <Truck className="input-icon" size={22} />
@@ -650,6 +675,17 @@ export default function HomePage() {
           <p>&copy; 2026 PrimeRoute Logistics. All rights reserved.</p>
         </div>
       </footer>
-    </>
+      {/* Map Picker Modal */}
+      <MapPickerModal 
+        isOpen={isMapModalOpen}
+        title={mapModalTarget === "pickup" ? "Select Pickup Location" : "Select Drop-off Location"}
+        onClose={() => setIsMapModalOpen(false)}
+        onConfirm={(address) => {
+          if (mapModalTarget === "pickup") setPickupLocation(address);
+          if (mapModalTarget === "dropoff") setDropoffLocation(address);
+          setIsMapModalOpen(false);
+        }}
+      />
+    </div>
   );
 }
