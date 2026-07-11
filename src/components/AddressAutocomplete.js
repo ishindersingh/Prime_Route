@@ -38,13 +38,12 @@ export default function AddressAutocomplete({ placeholder, name, required, value
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        // Photon API powered by OpenStreetMap
-        // We add 'lat=43.651070&lon=-79.347015' (Toronto) for location bias if desired, 
-        // but just querying works globally. Let's bias towards Canada/US for speed or leave it generic.
-        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
+        // Restrict search to Canada using bounding box (bbox=minLon,minLat,maxLon,maxLat)
+        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5&bbox=-142,41,-52,84`);
         if (!res.ok) throw new Error("Network response was not ok");
         const data = await res.json();
         
+        if (data.features) {
           const formattedSuggestions = data.features.map(f => {
             const p = f.properties;
             let parts = [];
