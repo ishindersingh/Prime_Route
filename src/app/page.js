@@ -108,41 +108,43 @@ export default function HomePage() {
             <div className="hero-overlay"></div>
           </div>
           
-          <div className="container hero-content-center">
-            <motion.div 
-              className="hero-text-center"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeInUp}
-            >
-              <div className="hero-badge">PrimeRoute Logistics</div>
-              <h1 className="hero-title-massive">
-                Moving Made <br/><span className="text-gradient">Simple.</span>
-              </h1>
-              <p className="hero-subtitle-large">Premium local moving across the GTA.<br/>Transparent pricing. No hidden fees.</p>
-              
-              <div className="hero-quick-book glass-card hover-lift">
-                <div className="quick-book-inputs">
-                  <div className="qb-input">
-                    <MapPin size={20} className="text-accent" />
-                    <input type="text" placeholder="Pickup location" />
+          <div className="hero-bottom-sheet">
+            <div className="container hero-content-center">
+              <motion.div 
+                className="hero-text-center"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInUp}
+              >
+                <div className="hero-badge">PrimeRoute Logistics</div>
+                <h1 className="hero-title-massive">
+                  Moving Made <br/><span className="text-gradient">Simple.</span>
+                </h1>
+                <p className="hero-subtitle-large">Premium local moving across the GTA.<br/>Transparent pricing. No hidden fees.</p>
+                
+                <div className="hero-quick-book glass-card hover-lift">
+                  <div className="quick-book-inputs">
+                    <div className="qb-input">
+                      <MapPin size={20} className="text-accent" />
+                      <input type="text" placeholder="Pickup location" />
+                    </div>
+                    <div className="qb-divider"></div>
+                    <div className="qb-input">
+                      <MapPin size={20} className="text-accent" />
+                      <input type="text" placeholder="Drop-off location" />
+                    </div>
+                    <a href="#book" className="btn btn-primary qb-btn">Get Quote</a>
                   </div>
-                  <div className="qb-divider"></div>
-                  <div className="qb-input">
-                    <MapPin size={20} className="text-accent" />
-                    <input type="text" placeholder="Drop-off location" />
-                  </div>
-                  <a href="#book" className="btn btn-primary qb-btn">Get Quote</a>
                 </div>
-              </div>
-              
-              <div className="hero-trust">
-                <div className="trust-item"><CheckCircle size={18} className="text-accent" /> Fully Insured</div>
-                <div className="trust-item"><CheckCircle size={18} className="text-accent" /> Same-Day Available</div>
-                <div className="trust-item"><CheckCircle size={18} className="text-accent" /> 5-Star Rated</div>
-              </div>
-            </motion.div>
+                
+                <div className="hero-trust">
+                  <div className="trust-item"><CheckCircle size={18} className="text-accent" /> Fully Insured</div>
+                  <div className="trust-item"><CheckCircle size={18} className="text-accent" /> Same-Day Available</div>
+                  <div className="trust-item"><CheckCircle size={18} className="text-accent" /> 5-Star Rated</div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
