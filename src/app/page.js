@@ -686,6 +686,6 @@ export default function HomePage() {
           setIsMapModalOpen(false);
         }}
       />
-    </div>
+    </>
   );
 }
