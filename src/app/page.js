@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { 
   Truck, DollarSign, UserCheck, Clock, Shield, 
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
-  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle
+  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar
 } from "lucide-react";
 
 // Animation Variants
@@ -448,33 +448,33 @@ export default function HomePage() {
             </motion.div>
             
             <motion.div 
-              className="booking-container glass-card hover-lift"
+              className="booking-container"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={fadeInUp}
             >
-              <form onSubmit={handleBooking} className="booking-form">
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label htmlFor="bookDate">Date</label>
-                    <input type="date" id="bookDate" name="bookDate" required />
+              <form onSubmit={handleBooking} className="app-booking-form">
+                <div className="app-form-card">
+                  <div className="app-input-row">
+                    <Calendar className="input-icon" size={22} />
+                    <input type="date" id="bookDate" name="bookDate" required aria-label="Date" />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="bookTime">Preferred Time</label>
-                    <input type="time" id="bookTime" name="bookTime" required />
+                  <div className="app-input-row">
+                    <Clock className="input-icon" size={22} />
+                    <input type="time" id="bookTime" name="bookTime" required aria-label="Preferred Time" />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="bookPickup">Pickup Address (or intersection)</label>
-                    <input type="text" id="bookPickup" name="bookPickup" placeholder="e.g. 100 Queen St W, Toronto" required />
+                  <div className="app-input-row">
+                    <MapPin className="input-icon" size={22} />
+                    <input type="text" id="bookPickup" name="bookPickup" placeholder="Pickup Address (e.g. 100 Queen St W)" required />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="bookDropoff">Drop-off Address</label>
-                    <input type="text" id="bookDropoff" name="bookDropoff" placeholder="e.g. 10 Peel Centre Dr, Brampton" required />
+                  <div className="app-input-row">
+                    <MapPin className="input-icon" size={22} />
+                    <input type="text" id="bookDropoff" name="bookDropoff" placeholder="Drop-off Address" required />
                   </div>
-                  <div className="form-group full-width">
-                    <label htmlFor="bookService">Service Needed</label>
-                    <select id="bookService" name="bookService" defaultValue="" required>
+                  <div className="app-input-row select-row">
+                    <Truck className="input-icon" size={22} />
+                    <select id="bookService" name="bookService" defaultValue="" required aria-label="Service Needed">
                       <option value="" disabled>Select a service</option>
                       <option value="Local Pickup (Starting at $60)">Local Pickup (Starting at $60)</option>
                       <option value="Van + Driver ($80/hr)">Van + Driver ($80/hr)</option>
@@ -482,8 +482,8 @@ export default function HomePage() {
                     </select>
                   </div>
                 </div>
-                <button type="submit" className="btn btn-whatsapp w-100">
-                  <MessageCircle size={20} /> Confirm Booking on WhatsApp
+                <button type="submit" className="btn btn-whatsapp w-100 btn-lg">
+                  <MessageCircle size={22} /> Confirm Booking
                 </button>
               </form>
             </motion.div>
