@@ -5,6 +5,15 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock, Truck, Navigation, MessageCircle, Lock, Loader2 } from "lucide-react";
 import "../globals.css";
 
+let gunInstance = null;
+const getGun = async () => {
+  if (typeof window !== "undefined" && !gunInstance) {
+    const Gun = (await import('gun')).default;
+    gunInstance = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+  }
+  return gunInstance;
+};
+
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
@@ -25,9 +34,23 @@ export default function AdminDashboard() {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/bookings");
-      const data = await res.json();
-      setBookings(data);
+      const db = await getGun();
+      if (!db) return;
+
+      // Listen for data coming into 'primeroute_bookings'
+      db.get('primeroute_bookings').map().on((booking, id) => {
+        if (booking && booking.name) {
+          setBookings((prevBookings) => {
+            // Check if it already exists in the list to avoid duplicates
+            const exists = prevBookings.find((b) => b.id === booking.id);
+            if (exists) return prevBookings;
+            
+            const newBookings = [booking, ...prevBookings];
+            // Sort by createdAt descending
+            return newBookings.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          });
+        }
+      });
     } catch (err) {
       console.error(err);
     } finally {

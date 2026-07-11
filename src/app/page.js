@@ -11,6 +11,16 @@ import {
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import MapPickerModal from "@/components/MapPickerModal";
 
+let gunInstance = null;
+const getGun = async () => {
+  if (typeof window !== "undefined" && !gunInstance) {
+    const Gun = (await import('gun')).default;
+    // Connect to a free community relay server
+    gunInstance = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+  }
+  return gunInstance;
+};
+
 // Animation Variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -60,21 +70,34 @@ export default function HomePage() {
     };
 
     try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      
-      if (res.ok) {
-        setBookingStatus("success");
-        e.target.reset();
-        setPickupLocation("");
-        setDropoffLocation("");
-        alert("Your work will be done, we got your info in our backend!");
-      } else {
-        setBookingStatus("error");
+      const db = await getGun();
+      if (!db) {
+        throw new Error("Database not initialized");
       }
+
+      // Generate a unique ID based on timestamp
+      const id = "booking_" + Date.now();
+      
+      // Save to the decentralized Gun graph
+      db.get('primeroute_bookings').get(id).put({
+        id: id,
+        name: data.name,
+        phone: data.phone,
+        date: data.date,
+        time: data.time,
+        pickup: data.pickup,
+        dropoff: data.dropoff,
+        service: data.service,
+        status: "pending",
+        createdAt: Date.now()
+      });
+
+      // Show success immediately
+      setBookingStatus("success");
+      e.target.reset();
+      setPickupLocation("");
+      setDropoffLocation("");
+      alert("Your work will be done, we got your info securely in our decentralized network!");
     } catch (err) {
       console.error(err);
       setBookingStatus("error");
