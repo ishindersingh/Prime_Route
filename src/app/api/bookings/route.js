@@ -38,3 +38,24 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Failed to create booking' }, { status: 500 });
   }
 }
+
+export async function PATCH(request) {
+  try {
+    const body = await request.json();
+    const { id, status } = body;
+
+    if (!id || !status) {
+      return NextResponse.json({ error: 'Missing id or status' }, { status: 400 });
+    }
+
+    const booking = await prisma.booking.update({
+      where: { id },
+      data: { status }
+    });
+
+    return NextResponse.json(booking, { status: 200 });
+  } catch (error) {
+    console.error("PATCH Error:", error);
+    return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 });
+  }
+}

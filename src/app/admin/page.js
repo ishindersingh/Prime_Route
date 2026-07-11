@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Calendar, Clock, Truck, Navigation, MessageCircle, Lock, Loader2 } from "lucide-react";
+import { MapPin, Phone, Calendar, Clock, Truck, Navigation, MessageCircle, Lock, Loader2, CheckCircle } from "lucide-react";
 import "../globals.css";
 
 export default function AdminDashboard() {
@@ -11,6 +11,7 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState("pending");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,6 +33,21 @@ export default function AdminDashboard() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateBookingStatus = async (id, status) => {
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      });
+      if (res.ok) {
+        setBookings(bookings.map(b => b.id === id ? { ...b, status } : b));
+      }
+    } catch (err) {
+      console.error("Failed to update status", err);
     }
   };
 
@@ -71,6 +87,8 @@ export default function AdminDashboard() {
     );
   }
 
+  const filteredBookings = bookings.filter(b => b.status === activeTab || (!b.status && activeTab === "pending"));
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
@@ -78,7 +96,22 @@ export default function AdminDashboard() {
         <button onClick={fetchBookings} className="btn btn-secondary">Refresh</button>
       </header>
 
-      <div className="container" style={{ padding: '2rem 1rem' }}>
+      <div className="admin-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', padding: '1rem' }}>
+        <button 
+          className={`btn ${activeTab === 'pending' ? 'btn-primary' : 'btn-outline'}`}
+          onClick={() => setActiveTab('pending')}
+        >
+          Active Bookings
+        </button>
+        <button 
+          className={`btn ${activeTab === 'completed' ? 'btn-primary' : 'btn-outline'}`}
+          onClick={() => setActiveTab('completed')}
+        >
+          History
+        </button>
+      </div>
+
+      <div className="container" style={{ padding: '1rem' }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
             <Loader2 className="animate-spin" size={40} color="var(--primary)" />
@@ -89,7 +122,7 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <div className="admin-grid">
-            {bookings.map((booking) => (
+            {filteredBookings.map((booking) => (
               <motion.div 
                 key={booking.id} 
                 className="admin-booking-card"
@@ -98,7 +131,11 @@ export default function AdminDashboard() {
               >
                 <div className="admin-card-header">
                   <h3>{booking.name}</h3>
-                  <span className="badge-new">New</span>
+                  {booking.status === "pending" || !booking.status ? (
+                    <span className="badge-new">Active</span>
+                  ) : (
+                    <span className="badge-new" style={{ background: '#4CAF50' }}>Completed</span>
+                  )}
                 </div>
                 
                 <div className="admin-card-body">
@@ -119,19 +156,30 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                <div className="admin-card-actions">
+                <div className="admin-card-actions" style={{ flexWrap: 'wrap' }}>
                   <button 
                     onClick={() => openNavigation(booking.pickup, booking.dropoff)}
                     className="action-btn nav-btn"
+                    style={{ flex: '1 1 45%' }}
                   >
                     <Navigation size={18} /> Navigate
                   </button>
                   <button 
                     onClick={() => openWhatsApp(booking)}
                     className="action-btn wa-btn"
+                    style={{ flex: '1 1 45%' }}
                   >
                     <MessageCircle size={18} /> WhatsApp
                   </button>
+                  {(booking.status === "pending" || !booking.status) && (
+                    <button 
+                      onClick={() => updateBookingStatus(booking.id, "completed")}
+                      className="action-btn"
+                      style={{ flex: '1 1 100%', background: '#4CAF50', color: 'white', border: 'none' }}
+                    >
+                      <CheckCircle size={18} /> Mark as Done
+                    </button>
+                  )}
                 </div>
               </motion.div>
             ))}
