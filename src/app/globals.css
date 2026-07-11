@@ -1041,7 +1041,7 @@ h1, h2, h3, h4, h5, h6 {
     .navbar {
         top: 0.75rem;
         width: calc(100% - 1.25rem);
-        padding: 0.5rem 1rem;
+        padding: 0.65rem 1.15rem;
         border-radius: 1.25rem;
     }
 
@@ -1052,18 +1052,19 @@ h1, h2, h3, h4, h5, h6 {
 
     .hamburger {
         display: flex;
+        padding: 0.5rem; /* Better touch target */
     }
 
     /* --- Hero --- */
     .hero {
         min-height: 100svh;
-        padding-top: 80px;
+        padding-top: 85px;
         padding-bottom: 2rem;
         align-items: flex-start;
     }
 
     .hero-content-center {
-        padding: 0 0.25rem;
+        padding: 0;
     }
 
     .hero-text-center {
@@ -1071,67 +1072,72 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .hero-badge {
-        font-size: 0.65rem;
-        padding: 0.3rem 0.85rem;
+        font-size: 0.7rem;
+        padding: 0.4rem 1rem;
         margin-bottom: 1rem;
         letter-spacing: 0.04em;
     }
 
     .hero-title-massive {
-        font-size: 2.4rem;
-        line-height: 1.1;
-        margin-bottom: 0.85rem;
+        font-size: 2.15rem;
+        line-height: 1.15;
+        margin-bottom: 1rem;
     }
 
     .hero-subtitle-large {
-        font-size: 0.95rem;
+        font-size: 1rem;
         margin-bottom: 1.5rem;
         line-height: 1.5;
+        padding: 0 0.5rem;
     }
 
     .hero-quick-book {
         max-width: 100%;
-        border-radius: 1rem;
-        padding: 0.4rem;
-        margin-bottom: 1.5rem;
+        border-radius: 1.25rem;
+        padding: 0.65rem;
+        margin-bottom: 1.75rem;
+        width: calc(100% - 1rem);
     }
 
     .quick-book-inputs {
         flex-direction: column;
-        border-radius: 0.85rem;
-        gap: 0;
+        border-radius: 1rem;
+        gap: 0.5rem; /* Add gap for mobile readability */
+        background: transparent; /* Remove white background wrapper on mobile */
     }
 
     .qb-input {
-        padding: 0.65rem 0.85rem;
+        padding: 0.85rem 1rem; /* 48px touch target */
         width: 100%;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        background: white; /* Individual inputs get white bg */
+        border-radius: 0.75rem;
     }
 
     .qb-input input {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 
     .qb-divider {
-        width: 88%;
-        height: 1px;
-        margin: 0 auto;
+        display: none; /* Hide divider on mobile, rely on gap */
     }
 
     .qb-btn {
         width: 100%;
         text-align: center;
-        padding: 0.75rem;
-        border-radius: 0.65rem;
-        font-size: 0.95rem;
+        padding: 1rem; /* Taller button */
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 0.25rem;
     }
 
     .hero-trust {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0.6rem 1rem;
-        font-size: 0.8rem;
+        gap: 0.75rem 1.25rem;
+        font-size: 0.85rem;
     }
 
     /* --- General Sections --- */
