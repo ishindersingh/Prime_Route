@@ -8,22 +8,13 @@ import {
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
   Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
 } from "lucide-react";
+import { 
+  Truck, DollarSign, UserCheck, Clock, Shield, 
+  Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
+  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
+} from "lucide-react";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import MapPickerModal from "@/components/MapPickerModal";
-
-let gunInstance = null;
-const getGun = async () => {
-  if (typeof window !== "undefined" && !gunInstance) {
-    const Gun = (await import('gun')).default;
-    // Connect to a cluster of free community relay servers for global reliability
-    gunInstance = Gun([
-      'https://gun-manhattan.herokuapp.com/gun',
-      'https://peer.wallie.io/gun',
-      'https://relay.peer.ooo/gun'
-    ]);
-  }
-  return gunInstance;
-};
 
 // Animation Variants
 const fadeInUp = {
@@ -74,34 +65,21 @@ export default function HomePage() {
     };
 
     try {
-      const db = await getGun();
-      if (!db) {
-        throw new Error("Database not initialized");
-      }
-
-      // Generate a unique ID based on timestamp
-      const id = "booking_" + Date.now();
-      
-      // Save to the decentralized Gun graph
-      db.get('primeroute_bookings').get(id).put({
-        id: id,
-        name: data.name,
-        phone: data.phone,
-        date: data.date,
-        time: data.time,
-        pickup: data.pickup,
-        dropoff: data.dropoff,
-        service: data.service,
-        status: "pending",
-        createdAt: Date.now()
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
       });
-
-      // Show success immediately
-      setBookingStatus("success");
-      e.target.reset();
-      setPickupLocation("");
-      setDropoffLocation("");
-      alert("Your work will be done, we got your info securely in our decentralized network!");
+      
+      if (res.ok) {
+        setBookingStatus("success");
+        e.target.reset();
+        setPickupLocation("");
+        setDropoffLocation("");
+        alert("Your work will be done, we got your info in our backend!");
+      } else {
+        setBookingStatus("error");
+      }
     } catch (err) {
       console.error(err);
       setBookingStatus("error");
