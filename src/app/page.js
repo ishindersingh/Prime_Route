@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { 
   Truck, DollarSign, UserCheck, Clock, Shield, 
-  Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
+  Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers, Package,
   Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
 } from "lucide-react";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
@@ -210,7 +210,13 @@ export default function HomePage() {
                         </button>
                       </div>
                     </div>
-                    <a href="#book" className="btn btn-primary qb-btn">Book Now</a>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', width: '100%' }}>
+                      <a href="#book" className="btn btn-primary qb-btn" style={{ flex: 1, textAlign: 'center', padding: '1rem' }}>Book Now</a>
+                      <a href="/track" className="btn btn-outline qb-btn" style={{ flex: 1, textAlign: 'center', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <Package size={18} /> Track Order
+                      </a>
+                    </div>
                   </div>
                 </div>
                 
