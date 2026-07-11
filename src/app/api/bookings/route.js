@@ -65,3 +65,23 @@ export async function PATCH(request) {
     return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 });
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    }
+
+    await prisma.booking.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error("DELETE Error:", error);
+    return NextResponse.json({ error: 'Failed to delete booking' }, { status: 500 });
+  }
+}
