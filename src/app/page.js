@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import { 
   Truck, DollarSign, UserCheck, Clock, Shield, 
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
-  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar
+  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User
 } from "lucide-react";
+import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 
 // Animation Variants
 const fadeInUp = {
@@ -20,10 +21,22 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
 };
 
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+const libraries = ["places"];
+
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  const [bookingStatus, setBookingStatus] = useState(null);
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [dropoffLocation, setDropoffLocation] = useState("");
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries: libraries,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,18 +47,41 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
+    setBookingStatus("loading");
+    
     const formData = new FormData(e.target);
-    const date = formData.get("bookDate");
-    const time = formData.get("bookTime");
-    const pickup = formData.get("bookPickup");
-    const dropoff = formData.get("bookDropoff");
-    const service = formData.get("bookService");
+    const data = {
+      name: formData.get("bookName"),
+      phone: formData.get("bookPhone"),
+      date: formData.get("bookDate"),
+      time: formData.get("bookTime"),
+      pickup: pickupLocation || formData.get("bookPickupFallback"),
+      dropoff: dropoffLocation || formData.get("bookDropoffFallback"),
+      service: formData.get("bookService"),
+    };
 
-    const message = `Hi PrimeRoute Logistics, I would like to book a move.\n\n*Date:* ${date}\n*Time:* ${time}\n*Pickup Address:* ${pickup}\n*Drop-off Address:* ${dropoff}\n*Service:* ${service}\n\nPlease confirm availability.`;
-    const whatsappUrl = `https://wa.me/13065013800?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+    try {
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      if (res.ok) {
+        setBookingStatus("success");
+        e.target.reset();
+        setPickupLocation("");
+        setDropoffLocation("");
+        alert("Your work will be done, we got your info in our backend!");
+      } else {
+        setBookingStatus("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setBookingStatus("error");
+    }
   };
 
   return (
@@ -459,6 +495,14 @@ export default function HomePage() {
               <form onSubmit={handleBooking} className="app-booking-form">
                 <div className="app-form-card">
                   <div className="app-input-row">
+                    <User className="input-icon" size={22} />
+                    <input type="text" id="bookName" name="bookName" placeholder="Your Name" required />
+                  </div>
+                  <div className="app-input-row">
+                    <Phone className="input-icon" size={22} />
+                    <input type="tel" id="bookPhone" name="bookPhone" placeholder="Your Phone Number" required />
+                  </div>
+                  <div className="app-input-row">
                     <Calendar className="input-icon" size={22} />
                     <input type="date" id="bookDate" name="bookDate" required aria-label="Date" />
                   </div>
@@ -468,11 +512,23 @@ export default function HomePage() {
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    <input type="text" id="bookPickup" name="bookPickup" placeholder="Pickup Address (e.g. 100 Queen St W)" required />
+                    {isLoaded && GOOGLE_MAPS_API_KEY ? (
+                      <Autocomplete onPlaceChanged={() => {}} className="w-100">
+                        <input type="text" placeholder="Pickup Address (e.g. 100 Queen St W)" required onChange={(e) => setPickupLocation(e.target.value)} />
+                      </Autocomplete>
+                    ) : (
+                      <input type="text" name="bookPickupFallback" placeholder="Pickup Address" required onChange={(e) => setPickupLocation(e.target.value)} />
+                    )}
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    <input type="text" id="bookDropoff" name="bookDropoff" placeholder="Drop-off Address" required />
+                    {isLoaded && GOOGLE_MAPS_API_KEY ? (
+                      <Autocomplete onPlaceChanged={() => {}} className="w-100">
+                        <input type="text" placeholder="Drop-off Address" required onChange={(e) => setDropoffLocation(e.target.value)} />
+                      </Autocomplete>
+                    ) : (
+                      <input type="text" name="bookDropoffFallback" placeholder="Drop-off Address" required onChange={(e) => setDropoffLocation(e.target.value)} />
+                    )}
                   </div>
                   <div className="app-input-row select-row">
                     <Truck className="input-icon" size={22} />

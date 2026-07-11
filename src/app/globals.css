@@ -114,11 +114,143 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-gradient {
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: none; /* Text shadow breaks background-clip on some browsers */
+}
+
+/* --- Admin Dashboard --- */
+.admin-login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    padding: 1rem;
+}
+.admin-login-form {
+    width: 100%;
+    max-width: 400px;
+}
+.admin-dashboard {
+    min-height: 100vh;
+    background: #f1f5f9;
+}
+.admin-header {
+    background: white;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-header h1 {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+.admin-booking-card {
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.admin-card-header {
+    background: var(--primary);
+    color: white;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+.badge-new {
+    background: var(--accent);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.admin-card-body {
+    padding: 1.25rem;
+}
+.admin-card-body p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+.route-box {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+.route-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+.route-point p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+.pickup-dot { background: #3b82f6; }
+.dropoff-dot { background: #ef4444; }
+.route-line {
+    position: absolute;
+    left: 1.35rem;
+    top: 1.75rem;
+    bottom: 1.75rem;
+    width: 2px;
+    background: #cbd5e1;
+}
+.admin-card-actions {
+    display: flex;
+    border-top: 1px solid #e2e8f0;
+}
+.action-btn {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+}
+.action-btn:hover {
+    background: #f1f5f9;
+}
+.nav-btn {
+    color: #3b82f6;
+    border-right: 1px solid #e2e8f0;
+}
+.wa-btn {
+    color: #25D366;
 }
 
 .section-header {
