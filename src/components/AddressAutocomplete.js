@@ -10,6 +10,13 @@ export default function AddressAutocomplete({ placeholder, name, required, value
   const [loading, setLoading] = useState(false);
   const wrapperRef = useRef(null);
 
+  // Sync internal state with external value prop
+  useEffect(() => {
+    if (value !== undefined && value !== query) {
+      setQuery(value);
+    }
+  }, [value]);
+
   // Close dropdown if clicked outside
   useEffect(() => {
     function handleClickOutside(event) {
