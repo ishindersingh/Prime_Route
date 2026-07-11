@@ -9,7 +9,7 @@ datasource db {
 
 model Booking {
   id        String   @id @default(cuid())
-  trackingId String  @unique
+  trackingId String  @unique @default(cuid())
   name      String
   phone         String
   receiverPhone String?
