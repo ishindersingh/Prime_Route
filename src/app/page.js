@@ -210,7 +210,6 @@ export default function HomePage() {
                         </button>
                       </div>
                     </div>
-                    </div>
                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', width: '100%' }}>
                       <a href="#book" className="btn btn-primary qb-btn" style={{ flex: 1, textAlign: 'center', padding: '1rem' }}>Book Now</a>
                       <a href="/track" className="btn btn-outline qb-btn" style={{ flex: 1, textAlign: 'center', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
