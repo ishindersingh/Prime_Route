@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { MapPin } from "lucide-react";
 
-export default function AddressAutocomplete({ placeholder, name, required, value, onChange }) {
+export default function AddressAutocomplete({ placeholder, name, required, value, onChange, onSelectLocation }) {
   const [query, setQuery] = useState(value || "");
   const [suggestions, setSuggestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -45,15 +45,12 @@ export default function AddressAutocomplete({ placeholder, name, required, value
         if (!res.ok) throw new Error("Network response was not ok");
         const data = await res.json();
         
-        if (data.features) {
           const formattedSuggestions = data.features.map(f => {
             const p = f.properties;
             let parts = [];
             
-            // Prioritize building/business name if it exists and isn't just the street
             if (p.name && p.name !== p.street) parts.push(p.name);
             
-            // Street address
             let streetPart = "";
             if (p.housenumber) streetPart += p.housenumber + " ";
             if (p.street) streetPart += p.street;
@@ -62,11 +59,25 @@ export default function AddressAutocomplete({ placeholder, name, required, value
             if (p.city) parts.push(p.city);
             if (p.state) parts.push(p.state);
             
-            return parts.join(", ");
-          }).filter(Boolean); // remove empties
+            const addressString = parts.join(", ");
+            // Geometry coordinates are [lon, lat]
+            const coords = f.geometry && f.geometry.coordinates 
+              ? [f.geometry.coordinates[1], f.geometry.coordinates[0]] // Convert to [lat, lon]
+              : null;
+              
+            return { address: addressString, coords };
+          }).filter(s => s.address); // remove empties
 
-          // Remove duplicates
-          setSuggestions([...new Set(formattedSuggestions)]);
+          // Remove duplicates based on address string
+          const unique = [];
+          const seen = new Set();
+          for (const item of formattedSuggestions) {
+            if (!seen.has(item.address)) {
+              seen.add(item.address);
+              unique.push(item);
+            }
+          }
+          setSuggestions(unique);
         }
       } catch (err) {
         console.error("Autocomplete error:", err);
@@ -78,11 +89,14 @@ export default function AddressAutocomplete({ placeholder, name, required, value
     return () => clearTimeout(timer);
   }, [query, isOpen]);
 
-  const handleSelect = (address) => {
-    setQuery(address);
+  const handleSelect = (suggestion) => {
+    setQuery(suggestion.address);
     setIsOpen(false);
     if (onChange) {
-      onChange(address);
+      onChange(suggestion.address);
+    }
+    if (onSelectLocation && suggestion.coords) {
+      onSelectLocation(suggestion.coords);
     }
   };
 
@@ -117,7 +131,7 @@ export default function AddressAutocomplete({ placeholder, name, required, value
               onClick={() => handleSelect(suggestion)}
             >
               <MapPin size={16} className="text-muted" style={{ marginRight: '8px', flexShrink: 0, marginTop: '2px' }} />
-              <span>{suggestion}</span>
+              <span>{suggestion.address}</span>
             </li>
           ))}
         </ul>

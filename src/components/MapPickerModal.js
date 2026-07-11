@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { X, Check } from 'lucide-react';
 import { useState } from 'react';
+import AddressAutocomplete from './AddressAutocomplete';
 
 // Dynamically import the map to avoid Next.js SSR "window is not defined" issues
 const Map = dynamic(() => import('./Map'), { 
@@ -16,6 +17,7 @@ const Map = dynamic(() => import('./Map'), {
 
 export default function MapPickerModal({ isOpen, onClose, onConfirm, title }) {
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [mapCenter, setMapCenter] = useState(null);
 
   if (!isOpen) return null;
 
@@ -27,8 +29,19 @@ export default function MapPickerModal({ isOpen, onClose, onConfirm, title }) {
           <button onClick={onClose} className="close-btn"><X size={24} /></button>
         </div>
         
-        <div className="map-modal-body">
-          <Map onLocationSelect={(addr) => setSelectedAddress(addr)} />
+        <div className="map-modal-body" style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)', background: 'white' }}>
+            <AddressAutocomplete 
+              name="mapSearch" 
+              placeholder="Search address or place..." 
+              value=""
+              onChange={() => {}}
+              onSelectLocation={(coords) => setMapCenter(coords)}
+            />
+          </div>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <Map onLocationSelect={(addr) => setSelectedAddress(addr)} centerTo={mapCenter} />
+          </div>
         </div>
         
         <div className="map-modal-footer">

@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { MapContainer, TileLayer, useMapEvents, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-geosearch/dist/geosearch.css';
 
 // Component that listens to map movement and updates center
 function MapController({ setCenterPos }) {
@@ -16,38 +14,18 @@ function MapController({ setCenterPos }) {
   return null;
 }
 
-// Search Control
-function SearchField() {
-  const map = useMapEvents({});
-  
+// Component to fly to a new location when the prop changes
+function ChangeView({ center }) {
+  const map = useMap();
   useEffect(() => {
-    const provider = new OpenStreetMapProvider();
-    const searchControl = new GeoSearchControl({
-      provider: provider,
-      style: 'bar',
-      showMarker: false,
-      showPopup: false,
-      autoClose: true,
-      retainZoomLevel: false,
-      animateZoom: true,
-      keepResult: false,
-      searchLabel: 'Search for address or place...'
-    });
-
-    map.addControl(searchControl);
-    
-    // When a search result is found, move the center map pin
-    map.on('geosearch/showlocation', function (result) {
-      map.setView([result.location.y, result.location.x], 16);
-    });
-
-    return () => map.removeControl(searchControl);
-  }, [map]);
-  
+    if (center) {
+      map.flyTo(center, 16);
+    }
+  }, [center, map]);
   return null;
 }
 
-export default function Map({ initialPosition = [43.651070, -79.347015], onLocationSelect }) {
+export default function Map({ initialPosition = [43.651070, -79.347015], onLocationSelect, centerTo }) {
   const [centerPos, setCenterPos] = useState({ lat: initialPosition[0], lng: initialPosition[1] });
   const [address, setAddress] = useState("Drag map to select location");
   const [loading, setLoading] = useState(false);
@@ -98,7 +76,7 @@ export default function Map({ initialPosition = [43.651070, -79.347015], onLocat
           attribution='&copy; <a href="https://carto.com/">Carto</a>'
         />
         <MapController setCenterPos={setCenterPos} />
-        <SearchField />
+        {centerTo && <ChangeView center={centerTo} />}
       </MapContainer>
       
       {/* Stationary Center Pin */}
