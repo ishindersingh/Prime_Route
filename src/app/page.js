@@ -30,6 +30,9 @@ export default function HomePage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
+  const [senderPhone, setSenderPhone] = useState("");
+  const [receiverPhone, setReceiverPhone] = useState("");
+  const [sameAsSender, setSameAsSender] = useState(false);
   
   // Map Modal State
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
@@ -51,11 +54,13 @@ export default function HomePage() {
     const formData = new FormData(e.target);
     const data = {
       name: formData.get("bookName"),
-      phone: formData.get("bookPhone"),
+      phone: senderPhone,
+      receiverPhone: sameAsSender ? senderPhone : receiverPhone,
       date: formData.get("bookDate"),
       time: formData.get("bookTime"),
       pickup: pickupLocation || formData.get("bookPickupFallback"),
       dropoff: dropoffLocation || formData.get("bookDropoffFallback"),
+      addressDetails: formData.get("addressDetails"),
       service: formData.get("bookService"),
     };
 
@@ -132,8 +137,8 @@ export default function HomePage() {
         <section id="home" className="hero">
           <div className="hero-bg">
             <Image 
-              src="/images/premium_hero.jpg" 
-              alt="Premium Silver Moving Van in Downtown Toronto" 
+              src="/hero_van.jpg" 
+              alt="Clean White Delivery Van in Downtown Toronto" 
               fill
               priority
               style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -531,7 +536,44 @@ export default function HomePage() {
                   </div>
                   <div className="app-input-row">
                     <Phone className="input-icon" size={22} />
-                    <input type="tel" id="bookPhone" name="bookPhone" placeholder="Your Phone Number" required />
+                    <input 
+                      type="tel" 
+                      id="bookPhone" 
+                      name="bookPhone" 
+                      placeholder="Your Phone Number" 
+                      required 
+                      value={senderPhone}
+                      onChange={(e) => {
+                        setSenderPhone(e.target.value);
+                        if (sameAsSender) setReceiverPhone(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="app-input-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Phone className="input-icon" size={22} />
+                      <input 
+                        type="tel" 
+                        id="receiverPhone" 
+                        name="receiverPhone" 
+                        placeholder="Receiver's Phone Number" 
+                        value={sameAsSender ? senderPhone : receiverPhone}
+                        onChange={(e) => !sameAsSender && setReceiverPhone(e.target.value)}
+                        disabled={sameAsSender}
+                        style={{ border: 'none', background: 'transparent', flex: 1, padding: '0.75rem', outline: 'none' }}
+                      />
+                    </div>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', paddingLeft: '2.5rem', marginTop: '-0.5rem', paddingBottom: '0.5rem' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={sameAsSender} 
+                        onChange={(e) => {
+                          setSameAsSender(e.target.checked);
+                          if (e.target.checked) setReceiverPhone(senderPhone);
+                        }} 
+                      />
+                      Same as sender
+                    </label>
                   </div>
                   <div className="app-input-row">
                     <Calendar className="input-icon" size={22} />
@@ -544,12 +586,15 @@ export default function HomePage() {
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <AddressAutocomplete 
+                      <input 
+                        type="text"
                         name="bookPickupFallback"
-                        placeholder="Pickup Address (e.g. 100 Queen St W)"
+                        placeholder="Pickup Address (Tap to open Map)"
                         required={true}
                         value={pickupLocation}
-                        onChange={setPickupLocation}
+                        onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                        readOnly
+                        style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
                       />
                       <button 
                         type="button" 
@@ -564,12 +609,15 @@ export default function HomePage() {
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
                     <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <AddressAutocomplete 
+                      <input 
+                        type="text"
                         name="bookDropoffFallback"
-                        placeholder="Drop-off Address"
+                        placeholder="Drop-off Address (Tap to open Map)"
                         required={true}
                         value={dropoffLocation}
-                        onChange={setDropoffLocation}
+                        onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                        readOnly
+                        style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
                       />
                       <button 
                         type="button" 
@@ -580,6 +628,10 @@ export default function HomePage() {
                         <MapIcon size={20} />
                       </button>
                     </div>
+                  </div>
+                  <div className="app-input-row">
+                    <Home className="input-icon" size={22} />
+                    <input type="text" id="addressDetails" name="addressDetails" placeholder="Apt, Suite, Buzzer Code (Optional)" />
                   </div>
                   <div className="app-input-row select-row">
                     <Truck className="input-icon" size={22} />

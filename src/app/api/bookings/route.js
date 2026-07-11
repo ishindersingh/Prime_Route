@@ -18,16 +18,18 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, phone, date, time, pickup, dropoff, service } = body;
+    const { name, phone, receiverPhone, date, time, pickup, dropoff, addressDetails, service } = body;
 
     const booking = await prisma.booking.create({
       data: {
         name: name || '',
         phone: phone || '',
+        receiverPhone: receiverPhone || '',
         date: date || '',
         time: time || '',
         pickup: pickup || '',
         dropoff: dropoff || '',
+        addressDetails: addressDetails || '',
         service: service || '',
       },
     });

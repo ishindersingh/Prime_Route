@@ -10,12 +10,14 @@ datasource db {
 model Booking {
   id        String   @id @default(cuid())
   name      String
-  phone     String
-  date      String
-  time      String
-  pickup    String
-  dropoff   String
-  service   String
+  phone         String
+  receiverPhone String?
+  date          String
+  time          String
+  pickup        String
+  dropoff       String
+  addressDetails String?
+  service       String
   status    String   @default("pending")
   createdAt DateTime @default(now())
 }

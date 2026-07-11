@@ -139,7 +139,12 @@ export default function AdminDashboard() {
                 </div>
                 
                 <div className="admin-card-body">
-                  <p><Phone size={16} /> {booking.phone}</p>
+                  <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <p style={{ flex: 1, minWidth: '150px' }}><Phone size={16} /> Sender: {booking.phone}</p>
+                    {booking.receiverPhone && booking.receiverPhone !== booking.phone && (
+                      <p style={{ flex: 1, minWidth: '150px', color: 'var(--accent)' }}><Phone size={16} /> Receiver: {booking.receiverPhone}</p>
+                    )}
+                  </div>
                   <p><Calendar size={16} /> {booking.date} at {booking.time}</p>
                   <p><Truck size={16} /> {booking.service}</p>
                   
@@ -154,6 +159,11 @@ export default function AdminDashboard() {
                       <p>{booking.dropoff}</p>
                     </div>
                   </div>
+                  {booking.addressDetails && (
+                    <div style={{ padding: '0.5rem', background: '#f1f5f9', borderRadius: '4px', fontSize: '0.85rem', marginTop: '0.5rem', borderLeft: '3px solid var(--primary)' }}>
+                      <strong>Details:</strong> {booking.addressDetails}
+                    </div>
+                  )}
                 </div>
 
                 <div className="admin-card-actions" style={{ flexWrap: 'wrap' }}>

@@ -64,8 +64,8 @@ export default function AddressAutocomplete({ placeholder, name, required, value
               ? [f.geometry.coordinates[1], f.geometry.coordinates[0]] // Convert to [lat, lon]
               : null;
               
-            return { address: addressString, coords };
-          }).filter(s => s.address); // remove empties
+            return { address: addressString, coords, country: p.country };
+          }).filter(s => s.address && s.country === "Canada"); // STRICT CANADA ONLY
 
           // Remove duplicates based on address string
           const unique = [];
