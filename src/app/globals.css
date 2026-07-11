@@ -45,6 +45,20 @@
 
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+/* Reduce base font size on mobile at the root level */
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 13px;
+    }
 }
 
 body {
@@ -58,7 +72,13 @@ body {
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: 0 var(--spacing-md);
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
 }
 
 .section {
@@ -1019,10 +1039,10 @@ h1, h2, h3, h4, h5, h6 {
 
     /* --- Navbar --- */
     .navbar {
-        top: 1rem;
-        width: calc(100% - 1.5rem);
-        padding: 0.65rem 1.25rem;
-        border-radius: 1.5rem;
+        top: 0.75rem;
+        width: calc(100% - 1.25rem);
+        padding: 0.5rem 1rem;
+        border-radius: 1.25rem;
     }
 
     .nav-links,
@@ -1037,44 +1057,63 @@ h1, h2, h3, h4, h5, h6 {
     /* --- Hero --- */
     .hero {
         min-height: 100svh;
-        padding-top: 100px;
+        padding-top: 80px;
+        padding-bottom: 2rem;
         align-items: flex-start;
     }
 
-    .hero-title-massive {
-        font-size: 3rem;
-        line-height: 1.1;
+    .hero-content-center {
+        padding: 0 0.25rem;
     }
 
-    .hero-subtitle-large {
-        font-size: 1.1rem;
+    .hero-text-center {
+        max-width: 100%;
     }
 
     .hero-badge {
-        font-size: 0.75rem;
-        padding: 0.4rem 1rem;
-        margin-bottom: 1.25rem;
+        font-size: 0.65rem;
+        padding: 0.3rem 0.85rem;
+        margin-bottom: 1rem;
+        letter-spacing: 0.04em;
+    }
+
+    .hero-title-massive {
+        font-size: 2.4rem;
+        line-height: 1.1;
+        margin-bottom: 0.85rem;
+    }
+
+    .hero-subtitle-large {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
     }
 
     .hero-quick-book {
         max-width: 100%;
-        border-radius: 1.25rem;
-        padding: 0.5rem;
+        border-radius: 1rem;
+        padding: 0.4rem;
+        margin-bottom: 1.5rem;
     }
 
     .quick-book-inputs {
         flex-direction: column;
-        border-radius: 1rem;
+        border-radius: 0.85rem;
         gap: 0;
     }
 
     .qb-input {
-        padding: 0.75rem 1rem;
+        padding: 0.65rem 0.85rem;
         width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .qb-input input {
+        font-size: 0.9rem;
     }
 
     .qb-divider {
-        width: 90%;
+        width: 88%;
         height: 1px;
         margin: 0 auto;
     }
@@ -1082,40 +1121,71 @@ h1, h2, h3, h4, h5, h6 {
     .qb-btn {
         width: 100%;
         text-align: center;
-        padding: 0.85rem;
-        border-radius: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 0.65rem;
+        font-size: 0.95rem;
     }
 
     .hero-trust {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 0.95rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.6rem 1rem;
+        font-size: 0.8rem;
     }
 
     /* --- General Sections --- */
     .section {
-        padding: 4rem 0;
+        padding: 3rem 0;
+    }
+
+    .section-header {
+        margin-bottom: 2rem;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.65rem;
+        line-height: 1.2;
     }
 
     .section-subtitle {
-        font-size: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .section-badge {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.75rem;
+    }
+
+    /* --- Glass Cards --- */
+    .glass-card {
+        padding: 1.25rem;
     }
 
     /* --- Services --- */
     .services-grid {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: 1rem;
+    }
+
+    .service-card {
+        padding: 1.25rem;
+    }
+
+    .card-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1rem;
     }
 
     /* --- Pricing --- */
     .pricing-grid {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: 1rem;
+    }
+
+    .pricing-card {
+        padding: 1.5rem 1.25rem;
     }
 
     .pricing-card.popular {
@@ -1123,13 +1193,22 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .pricing-card.popular:hover {
-        transform: translateY(-8px);
+        transform: translateY(-6px);
+    }
+
+    .price-amount {
+        font-size: 2.5rem;
     }
 
     /* --- Why Us --- */
     .features-list {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.85rem;
+    }
+
+    .feature-item {
+        padding: 1rem 1.25rem;
+        font-size: 0.9rem;
     }
 
     /* --- Areas --- */
@@ -1137,70 +1216,104 @@ h1, h2, h3, h4, h5, h6 {
         gap: 0.5rem;
         flex-wrap: wrap;
         justify-content: center;
+        padding: 1rem;
     }
 
     .glass-tag {
-        font-size: 0.85rem;
-        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.85rem;
+        gap: 0.35rem;
     }
 
     .areas-map-container {
-        height: 280px;
+        height: 230px;
     }
 
     /* --- Booking Form --- */
     .booking-container {
-        padding: 1.75rem 1.25rem;
+        padding: 1.5rem 1rem;
     }
 
     .booking-form .form-grid {
         grid-template-columns: 1fr;
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.9rem;
+    }
+
+    /* --- Testimonials --- */
+    .testimonials-grid {
+        grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    .testimonial-card {
+        padding: 1.25rem;
     }
 
     /* --- Contact --- */
     .contact-info {
         flex-direction: column;
-        gap: 1.25rem;
+        gap: 1rem;
+    }
+
+    .contact-item {
+        padding: 1rem;
+        font-size: 0.9rem;
     }
 
     /* --- FAQ --- */
     .faq-question {
-        font-size: 1rem;
-        padding: 1.1rem 1.25rem;
+        font-size: 0.95rem;
+        padding: 1rem 1.1rem;
     }
 
     .faq-answer {
-        font-size: 0.95rem;
-        padding: 0 1.25rem 1rem;
+        font-size: 0.875rem;
+        padding: 0 1.1rem 0.875rem;
     }
 
     /* --- Footer --- */
     .footer-content {
         flex-direction: column;
-        gap: 2rem;
+        gap: 1.5rem;
         text-align: center;
     }
 
     .footer-links {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 1rem;
-    }
-
-    /* --- Testimonials --- */
-    .testimonials-grid {
-        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     /* --- Stats / Why cards --- */
     .why-us-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.85rem;
     }
 
     .stat-number {
-        font-size: 2.5rem;
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+    }
+
+    /* --- Buttons --- */
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-whatsapp {
+        font-size: 1rem;
+        padding: 1rem;
     }
 }
 
@@ -1210,30 +1323,53 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 480px) {
     .navbar {
         width: calc(100% - 1rem);
-        border-radius: 1.25rem;
+        border-radius: 1rem;
+        padding: 0.45rem 0.85rem;
     }
 
     .hero-title-massive {
-        font-size: 2.5rem;
+        font-size: 2rem;
+    }
+
+    .hero-subtitle-large {
+        font-size: 0.875rem;
     }
 
     .section-title {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
     }
 
-    .btn-lg {
-        padding: 0.85rem 1.5rem;
-        font-size: 0.95rem;
+    .section {
+        padding: 2.5rem 0;
+    }
+
+    .glass-card {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+
+    .service-card {
+        padding: 1rem;
     }
 
     .booking-container {
-        padding: 1.25rem 1rem;
+        padding: 1rem 0.85rem;
     }
 
     .glass-tag {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+    }
+
+    .areas-map-container {
+        height: 200px;
+    }
+
+    .hero-trust {
+        font-size: 0.75rem;
+        gap: 0.4rem 0.75rem;
     }
 }
+
 
 
 /* Booking Form */

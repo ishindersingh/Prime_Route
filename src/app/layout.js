@@ -8,6 +8,12 @@ export const metadata = {
   description: "Reliable local moving services across Toronto, Brampton, Mississauga and Etobicoke.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
