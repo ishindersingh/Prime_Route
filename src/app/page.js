@@ -8,11 +8,6 @@ import {
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
   Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
 } from "lucide-react";
-import { 
-  Truck, DollarSign, UserCheck, Clock, Shield, 
-  Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
-  Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User, Map as MapIcon
-} from "lucide-react";
 import AddressAutocomplete from "@/components/AddressAutocomplete";
 import MapPickerModal from "@/components/MapPickerModal";
 
