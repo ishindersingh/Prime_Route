@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 // Component that listens to map movement and updates center
 function MapController({ setCenterPos }) {
@@ -11,6 +13,37 @@ function MapController({ setCenterPos }) {
       setCenterPos(map.getCenter());
     },
   });
+  return null;
+}
+
+// Search Control
+function SearchField() {
+  const map = useMapEvents({});
+  
+  useEffect(() => {
+    const provider = new OpenStreetMapProvider();
+    const searchControl = new GeoSearchControl({
+      provider: provider,
+      style: 'bar',
+      showMarker: false,
+      showPopup: false,
+      autoClose: true,
+      retainZoomLevel: false,
+      animateZoom: true,
+      keepResult: false,
+      searchLabel: 'Search for address or place...'
+    });
+
+    map.addControl(searchControl);
+    
+    // When a search result is found, move the center map pin
+    map.on('geosearch/showlocation', function (result) {
+      map.setView([result.location.y, result.location.x], 16);
+    });
+
+    return () => map.removeControl(searchControl);
+  }, [map]);
+  
   return null;
 }
 
@@ -65,6 +98,7 @@ export default function Map({ initialPosition = [43.651070, -79.347015], onLocat
           attribution='&copy; <a href="https://carto.com/">Carto</a>'
         />
         <MapController setCenterPos={setCenterPos} />
+        <SearchField />
       </MapContainer>
       
       {/* Stationary Center Pin */}
