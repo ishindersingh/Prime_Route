@@ -928,82 +928,313 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Responsive */
+/* ============================================
+   HAMBURGER MENU
+   ============================================ */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 100;
+}
+
+.ham-bar {
+    display: block;
+    width: 100%;
+    height: 2.5px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Mobile Menu Drawer */
+.mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 1px solid rgba(10, 37, 64, 0.1);
+    margin-top: 0.75rem;
+}
+
+.mobile-menu a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(10, 37, 64, 0.06);
+    transition: color var(--transition-fast);
+}
+
+.mobile-menu a:last-child {
+    border-bottom: none;
+    text-align: center;
+    padding: 0.85rem;
+}
+
+.mobile-menu a:hover {
+    color: var(--accent);
+}
+
+/* ============================================
+   TABLET (max-width: 992px)
+   ============================================ */
 @media (max-width: 992px) {
-    .hero-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-text {
-        margin: 0 auto;
-    }
-
-    .hero-cta-group {
-        justify-content: center;
-    }
-
-    .hero-overlay {
-        background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 100%);
-    }
-
-    .hero-floating-cards {
-        height: auto;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 2rem;
-    }
-
-    .hero-floating-cards .glass-card:nth-child(even),
-    .hero-floating-cards .glass-card:nth-child(odd) {
-        transform: none;
-        align-self: center;
+    .hero-title-massive {
+        font-size: 4rem;
     }
 
     .why-us-content {
         grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 768px) {
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .hero-title {
-        font-size: 3rem;
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .nav-links, .nav-actions {
-        display: none;
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .features-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .area-tags {
+        gap: 0.75rem;
+    }
+}
+
+/* ============================================
+   MOBILE (max-width: 768px)
+   ============================================ */
+@media (max-width: 768px) {
+
+    /* --- Navbar --- */
+    .navbar {
+        top: 1rem;
+        width: calc(100% - 1.5rem);
+        padding: 0.65rem 1.25rem;
+        border-radius: 1.5rem;
+    }
+
+    .nav-links,
+    .nav-actions {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    /* --- Hero --- */
+    .hero {
+        min-height: 100svh;
+        padding-top: 100px;
+        align-items: flex-start;
+    }
+
+    .hero-title-massive {
+        font-size: 3rem;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle-large {
+        font-size: 1.1rem;
+    }
+
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: 0.4rem 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .hero-quick-book {
+        max-width: 100%;
+        border-radius: 1.25rem;
+        padding: 0.5rem;
+    }
+
+    .quick-book-inputs {
+        flex-direction: column;
+        border-radius: 1rem;
+        gap: 0;
+    }
+
+    .qb-input {
+        padding: 0.75rem 1rem;
+        width: 100%;
+    }
+
+    .qb-divider {
+        width: 90%;
+        height: 1px;
+        margin: 0 auto;
+    }
+
+    .qb-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.85rem;
+        border-radius: 0.75rem;
+    }
+
+    .hero-trust {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    /* --- General Sections --- */
+    .section {
+        padding: 4rem 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+    }
+
+    /* --- Services --- */
+    .services-grid {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    /* --- Pricing --- */
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
 
     .pricing-card.popular {
         transform: none;
     }
-    
+
     .pricing-card.popular:hover {
         transform: translateY(-8px);
     }
 
-    .contact-info {
-        flex-direction: column;
-        gap: 1.5rem;
+    /* --- Why Us --- */
+    .features-list {
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
-    
+
+    /* --- Areas --- */
+    .area-tags {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .glass-tag {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .areas-map-container {
+        height: 280px;
+    }
+
+    /* --- Booking Form --- */
+    .booking-container {
+        padding: 1.75rem 1.25rem;
+    }
+
     .booking-form .form-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
-    
-    .booking-container {
-        padding: 2rem;
+
+    /* --- Contact --- */
+    .contact-info {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    /* --- FAQ --- */
+    .faq-question {
+        font-size: 1rem;
+        padding: 1.1rem 1.25rem;
+    }
+
+    .faq-answer {
+        font-size: 0.95rem;
+        padding: 0 1.25rem 1rem;
+    }
+
+    /* --- Footer --- */
+    .footer-content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    /* --- Testimonials --- */
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* --- Stats / Why cards --- */
+    .why-us-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
     }
 }
+
+/* ============================================
+   SMALL PHONES (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    .navbar {
+        width: calc(100% - 1rem);
+        border-radius: 1.25rem;
+    }
+
+    .hero-title-massive {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .btn-lg {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .booking-container {
+        padding: 1.25rem 1rem;
+    }
+
+    .glass-tag {
+        font-size: 0.8rem;
+    }
+}
+
 
 /* Booking Form */
 .booking-container {

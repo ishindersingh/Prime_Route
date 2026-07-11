@@ -23,6 +23,7 @@ const staggerContainer = {
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,7 +67,28 @@ export default function HomePage() {
           <div className="nav-actions">
             <a href="#book" className="btn btn-primary">Book Now</a>
           </div>
+          <button
+            className="hamburger"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className={`ham-bar ${mobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`ham-bar ${mobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`ham-bar ${mobileMenuOpen ? 'open' : ''}`}></span>
+          </button>
         </div>
+        {/* Mobile Drawer */}
+        {mobileMenuOpen && (
+          <div className="mobile-menu">
+            <a href="#home" onClick={() => setMobileMenuOpen(false)}>Home</a>
+            <a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+            <a href="#book" onClick={() => setMobileMenuOpen(false)}>Book</a>
+            <a href="#why-us" onClick={() => setMobileMenuOpen(false)}>Why Us</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+            <a href="#book" className="btn btn-primary" style={{marginTop: '0.5rem'}} onClick={() => setMobileMenuOpen(false)}>Book Now</a>
+          </div>
+        )}
       </nav>
 
       <main>
