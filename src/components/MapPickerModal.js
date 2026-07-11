@@ -29,8 +29,8 @@ export default function MapPickerModal({ isOpen, onClose, onConfirm, title }) {
           <button onClick={onClose} className="close-btn"><X size={24} /></button>
         </div>
         
-        <div className="map-modal-body" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)', background: 'white' }}>
+        <div className="map-modal-body" style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+          <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)', background: 'white', position: 'relative', zIndex: 2000 }}>
             <AddressAutocomplete 
               name="mapSearch" 
               placeholder="Search address or place..." 
@@ -39,7 +39,7 @@ export default function MapPickerModal({ isOpen, onClose, onConfirm, title }) {
               onSelectLocation={(coords) => setMapCenter(coords)}
             />
           </div>
-          <div style={{ flex: 1, position: 'relative' }}>
+          <div style={{ flex: 1, position: 'relative', zIndex: 1 }}>
             <Map onLocationSelect={(addr) => setSelectedAddress(addr)} centerTo={mapCenter} />
           </div>
         </div>
