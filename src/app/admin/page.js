@@ -87,7 +87,14 @@ export default function AdminDashboard() {
     );
   }
 
-  const filteredBookings = bookings.filter(b => b.status === activeTab || (!b.status && activeTab === "pending"));
+  const filteredBookings = bookings.filter(b => {
+    const s = b.status || "Pending";
+    if (activeTab === "pending") {
+      return s !== "Delivered";
+    } else {
+      return s === "Delivered";
+    }
+  });
 
   return (
     <div className="admin-dashboard">
@@ -130,12 +137,30 @@ export default function AdminDashboard() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div className="admin-card-header">
-                  <h3>{booking.name}</h3>
-                  {booking.status === "pending" || !booking.status ? (
-                    <span className="badge-new">Active</span>
-                  ) : (
-                    <span className="badge-new" style={{ background: '#4CAF50' }}>Completed</span>
-                  )}
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ margin: 0 }}>{booking.name}</h3>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'monospace', marginTop: '0.25rem' }}>{booking.trackingId}</span>
+                  </div>
+                  
+                  <select 
+                    value={booking.status || "Pending"} 
+                    onChange={(e) => updateBookingStatus(booking.id, e.target.value)}
+                    style={{ 
+                      padding: '0.5rem', 
+                      borderRadius: '8px', 
+                      border: '1px solid var(--border)', 
+                      background: booking.status === "Delivered" ? '#e6f4ea' : '#f8fafc',
+                      color: booking.status === "Delivered" ? '#1e8e3e' : 'var(--text-dark)',
+                      fontWeight: '600',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="On the Way">On the Way</option>
+                    <option value="Just Dropped">Just Dropped</option>
+                    <option value="Delivered">Delivered</option>
+                  </select>
                 </div>
                 
                 <div className="admin-card-body">
@@ -181,15 +206,6 @@ export default function AdminDashboard() {
                   >
                     <MessageCircle size={18} /> WhatsApp
                   </button>
-                  {(booking.status === "pending" || !booking.status) && (
-                    <button 
-                      onClick={() => updateBookingStatus(booking.id, "completed")}
-                      className="action-btn"
-                      style={{ flex: '1 1 100%', background: '#4CAF50', color: 'white', border: 'none' }}
-                    >
-                      <CheckCircle size={18} /> Mark as Done
-                    </button>
-                  )}
                 </div>
               </motion.div>
             ))}

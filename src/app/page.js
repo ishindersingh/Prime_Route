@@ -72,11 +72,11 @@ export default function HomePage() {
       });
       
       if (res.ok) {
-        setBookingStatus("success");
+        const resultData = await res.json();
+        setBookingStatus({ success: true, trackingId: resultData.trackingId });
         e.target.reset();
         setPickupLocation("");
         setDropoffLocation("");
-        alert("Your work will be done, we got your info in our backend!");
       } else {
         setBookingStatus("error");
       }
@@ -532,127 +532,147 @@ export default function HomePage() {
               viewport={{ once: true, margin: "-100px" }}
               variants={fadeInUp}
             >
-              <form onSubmit={handleBooking} className="app-booking-form">
-                <div className="app-form-card">
-                  <div className="app-input-row">
-                    <User className="input-icon" size={22} />
-                    <input type="text" id="bookName" name="bookName" placeholder="Your Name" required />
+              {bookingStatus?.success ? (
+                <div className="success-confirmation" style={{ textAlign: 'center', padding: '3rem 2rem', background: 'white', borderRadius: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
+                    <CheckCircle size={64} color="#25D366" style={{ margin: '0 auto 1rem' }} />
+                  </motion.div>
+                  <h3 style={{ fontSize: '1.8rem', color: 'var(--primary)', marginBottom: '0.5rem' }}>Booking Confirmed!</h3>
+                  <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>We've received your request and will be in touch shortly.</p>
+                  
+                  <div style={{ background: '#f8fafc', border: '1px dashed var(--accent)', padding: '1.5rem', borderRadius: '12px', display: 'inline-block', marginBottom: '2rem', width: '100%', maxWidth: '300px' }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>Your Tracking ID</p>
+                    <h2 style={{ margin: 0, color: 'var(--accent)', letterSpacing: '1px', fontSize: '2.2rem' }}>{bookingStatus.trackingId}</h2>
                   </div>
-                  <div className="app-input-row">
-                    <Phone className="input-icon" size={22} />
-                    <input 
-                      type="tel" 
-                      id="bookPhone" 
-                      name="bookPhone" 
-                      placeholder="Your Phone Number" 
-                      required 
-                      value={senderPhone}
-                      onChange={(e) => {
-                        setSenderPhone(e.target.value);
-                        if (sameAsSender) setReceiverPhone(e.target.value);
-                      }}
-                    />
+                  
+                  <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>
+                    <a href={`/track?id=${bookingStatus.trackingId}`} className="btn btn-primary btn-lg" style={{ width: '100%' }}>Track My Order</a>
+                    <button onClick={() => setBookingStatus(null)} className="btn btn-outline" style={{ width: '100%' }}>Book Another Delivery</button>
                   </div>
-                  <div className="app-input-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                </div>
+              ) : (
+                <form onSubmit={handleBooking} className="app-booking-form">
+                  <div className="app-form-card">
+                    <div className="app-input-row">
+                      <User className="input-icon" size={22} />
+                      <input type="text" id="bookName" name="bookName" placeholder="Your Name" required />
+                    </div>
+                    <div className="app-input-row">
                       <Phone className="input-icon" size={22} />
                       <input 
                         type="tel" 
-                        id="receiverPhone" 
-                        name="receiverPhone" 
-                        placeholder="Receiver's Phone Number" 
-                        value={sameAsSender ? senderPhone : receiverPhone}
-                        onChange={(e) => !sameAsSender && setReceiverPhone(e.target.value)}
-                        disabled={sameAsSender}
-                        style={{ border: 'none', background: 'transparent', flex: 1, padding: '0.75rem', outline: 'none' }}
-                      />
-                    </div>
-                    <label className={`same-sender-pill ${sameAsSender ? 'active' : ''}`} style={{ alignSelf: 'flex-start', marginLeft: '2.5rem', marginBottom: '0.5rem' }}>
-                      <div className="pill-knob"></div>
-                      <span>Same as sender</span>
-                      <input 
-                        type="checkbox" 
-                        checked={sameAsSender} 
+                        id="bookPhone" 
+                        name="bookPhone" 
+                        placeholder="Your Phone Number" 
+                        required 
+                        value={senderPhone}
                         onChange={(e) => {
-                          setSameAsSender(e.target.checked);
-                          if (e.target.checked) setReceiverPhone(senderPhone);
+                          setSenderPhone(e.target.value);
+                          if (sameAsSender) setReceiverPhone(e.target.value);
                         }}
-                        style={{ display: 'none' }}
                       />
-                    </label>
-                  </div>
-                  <div className="app-input-row">
-                    <Calendar className="input-icon" size={22} />
-                    <input type="date" id="bookDate" name="bookDate" required aria-label="Date" />
-                  </div>
-                  <div className="app-input-row">
-                    <Clock className="input-icon" size={22} />
-                    <input type="time" id="bookTime" name="bookTime" required aria-label="Preferred Time" />
-                  </div>
-                  <div className="app-input-row">
-                    <MapPin className="input-icon" size={22} />
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <input 
-                        type="text"
-                        name="bookPickupFallback"
-                        placeholder="Pickup Address (Tap to open Map)"
-                        required={true}
-                        value={pickupLocation}
-                        onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
-                        readOnly
-                        style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
-                      />
-                      <button 
-                        type="button" 
-                        className="map-picker-btn"
-                        onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
-                        aria-label="Select pickup location on map"
-                      >
-                        <MapIcon size={20} />
-                      </button>
+                    </div>
+                    <div className="app-input-row" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Phone className="input-icon" size={22} />
+                        <input 
+                          type="tel" 
+                          id="receiverPhone" 
+                          name="receiverPhone" 
+                          placeholder="Receiver's Phone Number" 
+                          value={sameAsSender ? senderPhone : receiverPhone}
+                          onChange={(e) => !sameAsSender && setReceiverPhone(e.target.value)}
+                          disabled={sameAsSender}
+                          style={{ border: 'none', background: 'transparent', flex: 1, padding: '0.75rem', outline: 'none' }}
+                        />
+                      </div>
+                      <label className={`same-sender-pill ${sameAsSender ? 'active' : ''}`} style={{ alignSelf: 'flex-start', marginLeft: '2.5rem', marginBottom: '0.5rem' }}>
+                        <div className="pill-knob"></div>
+                        <span>Same as sender</span>
+                        <input 
+                          type="checkbox" 
+                          checked={sameAsSender} 
+                          onChange={(e) => {
+                            setSameAsSender(e.target.checked);
+                            if (e.target.checked) setReceiverPhone(senderPhone);
+                          }}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                    </div>
+                    <div className="app-input-row">
+                      <Calendar className="input-icon" size={22} />
+                      <input type="date" id="bookDate" name="bookDate" required aria-label="Date" />
+                    </div>
+                    <div className="app-input-row">
+                      <Clock className="input-icon" size={22} />
+                      <input type="time" id="bookTime" name="bookTime" required aria-label="Preferred Time" />
+                    </div>
+                    <div className="app-input-row">
+                      <MapPin className="input-icon" size={22} />
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <input 
+                          type="text"
+                          name="bookPickupFallback"
+                          placeholder="Pickup Address (Tap to open Map)"
+                          required={true}
+                          value={pickupLocation}
+                          onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                          readOnly
+                          style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
+                        />
+                        <button 
+                          type="button" 
+                          className="map-picker-btn"
+                          onClick={() => { setMapModalTarget("pickup"); setIsMapModalOpen(true); }}
+                          aria-label="Select pickup location on map"
+                        >
+                          <MapIcon size={20} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="app-input-row">
+                      <MapPin className="input-icon" size={22} />
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <input 
+                          type="text"
+                          name="bookDropoffFallback"
+                          placeholder="Drop-off Address (Tap to open Map)"
+                          required={true}
+                          value={dropoffLocation}
+                          onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                          readOnly
+                          style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
+                        />
+                        <button 
+                          type="button" 
+                          className="map-picker-btn"
+                          onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
+                          aria-label="Select drop-off location on map"
+                        >
+                          <MapIcon size={20} />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="app-input-row">
+                      <Home className="input-icon" size={22} />
+                      <input type="text" id="addressDetails" name="addressDetails" placeholder="Apt, Suite, Buzzer Code (Optional)" />
+                    </div>
+                    <div className="app-input-row select-row">
+                      <Truck className="input-icon" size={22} />
+                      <select id="bookService" name="bookService" defaultValue="" required aria-label="Service Needed">
+                        <option value="" disabled>Select a service</option>
+                        <option value="Local Pickup (Starting at $60)">Local Pickup (Starting at $60)</option>
+                        <option value="Van + Driver ($80/hr)">Van + Driver ($80/hr)</option>
+                        <option value="Van + Driver + Helper ($110/hr)">Van + Driver + Helper ($110/hr)</option>
+                      </select>
                     </div>
                   </div>
-                  <div className="app-input-row">
-                    <MapPin className="input-icon" size={22} />
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <input 
-                        type="text"
-                        name="bookDropoffFallback"
-                        placeholder="Drop-off Address (Tap to open Map)"
-                        required={true}
-                        value={dropoffLocation}
-                        onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
-                        readOnly
-                        style={{ flex: 1, border: 'none', background: 'transparent', padding: '0.75rem 0', outline: 'none', cursor: 'pointer' }}
-                      />
-                      <button 
-                        type="button" 
-                        className="map-picker-btn"
-                        onClick={() => { setMapModalTarget("dropoff"); setIsMapModalOpen(true); }}
-                        aria-label="Select drop-off location on map"
-                      >
-                        <MapIcon size={20} />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="app-input-row">
-                    <Home className="input-icon" size={22} />
-                    <input type="text" id="addressDetails" name="addressDetails" placeholder="Apt, Suite, Buzzer Code (Optional)" />
-                  </div>
-                  <div className="app-input-row select-row">
-                    <Truck className="input-icon" size={22} />
-                    <select id="bookService" name="bookService" defaultValue="" required aria-label="Service Needed">
-                      <option value="" disabled>Select a service</option>
-                      <option value="Local Pickup (Starting at $60)">Local Pickup (Starting at $60)</option>
-                      <option value="Van + Driver ($80/hr)">Van + Driver ($80/hr)</option>
-                      <option value="Van + Driver + Helper ($110/hr)">Van + Driver + Helper ($110/hr)</option>
-                    </select>
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-whatsapp w-100 btn-lg">
-                  <MessageCircle size={22} /> Confirm Booking
-                </button>
-              </form>
+                  <button type="submit" className="btn btn-whatsapp w-100 btn-lg">
+                    {bookingStatus === "loading" ? "Processing..." : <><MessageCircle size={22} /> Confirm Booking</>}
+                  </button>
+                </form>
+              )}
             </motion.div>
           </div>
         </section>

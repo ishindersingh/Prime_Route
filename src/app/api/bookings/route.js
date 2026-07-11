@@ -20,8 +20,11 @@ export async function POST(request) {
     const body = await request.json();
     const { name, phone, receiverPhone, date, time, pickup, dropoff, addressDetails, service } = body;
 
+    const trackingId = 'PR-' + Math.floor(100000 + Math.random() * 900000).toString();
+
     const booking = await prisma.booking.create({
       data: {
+        trackingId,
         name: name || '',
         phone: phone || '',
         receiverPhone: receiverPhone || '',
@@ -31,6 +34,7 @@ export async function POST(request) {
         dropoff: dropoff || '',
         addressDetails: addressDetails || '',
         service: service || '',
+        status: 'Pending',
       },
     });
 
