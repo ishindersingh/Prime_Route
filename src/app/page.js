@@ -68,7 +68,7 @@ export default function HomePage() {
             <a href="#book" className="btn btn-primary">Book Now</a>
           </div>
           <button
-            className="hamburger"
+            className={`hamburger ${mobileMenuOpen ? 'menu-active' : ''}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -77,19 +77,22 @@ export default function HomePage() {
             <span className={`ham-bar ${mobileMenuOpen ? 'open' : ''}`}></span>
           </button>
         </div>
-        {/* Mobile Drawer */}
-        {mobileMenuOpen && (
-          <div className="mobile-menu">
+      </nav>
+
+      {/* Full-Screen Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="mobile-overlay fade-in visible">
+          <div className="mobile-overlay-content">
             <a href="#home" onClick={() => setMobileMenuOpen(false)}>Home</a>
             <a href="#services" onClick={() => setMobileMenuOpen(false)}>Services</a>
             <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#book" onClick={() => setMobileMenuOpen(false)}>Book</a>
             <a href="#why-us" onClick={() => setMobileMenuOpen(false)}>Why Us</a>
             <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a>
-            <a href="#book" className="btn btn-primary" style={{marginTop: '0.5rem'}} onClick={() => setMobileMenuOpen(false)}>Book Now</a>
+            <a href="#book" className="btn btn-primary mobile-book-btn" onClick={() => setMobileMenuOpen(false)}>Book Now</a>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
 
       <main>
         {/* Hero Section */}
