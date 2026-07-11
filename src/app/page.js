@@ -8,7 +8,7 @@ import {
   Home, Monitor, Moon, ShoppingBag, Archive, Box, Key, Layers,
   Check, CheckCircle, MapPin, Star, ChevronDown, Phone, Mail, MessageCircle, Calendar, User
 } from "lucide-react";
-import { useLoadScript, Autocomplete } from "@react-google-maps/api";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
 
 // Animation Variants
 const fadeInUp = {
@@ -21,9 +21,6 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
 };
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
-const libraries = ["places"];
-
 export default function HomePage() {
   const [scrolled, setScrolled] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
@@ -32,11 +29,6 @@ export default function HomePage() {
   const [bookingStatus, setBookingStatus] = useState(null);
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-    libraries: libraries,
-  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -512,23 +504,23 @@ export default function HomePage() {
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    {isLoaded && GOOGLE_MAPS_API_KEY ? (
-                      <Autocomplete onPlaceChanged={() => {}} className="w-100">
-                        <input type="text" placeholder="Pickup Address (e.g. 100 Queen St W)" required onChange={(e) => setPickupLocation(e.target.value)} />
-                      </Autocomplete>
-                    ) : (
-                      <input type="text" name="bookPickupFallback" placeholder="Pickup Address" required onChange={(e) => setPickupLocation(e.target.value)} />
-                    )}
+                    <AddressAutocomplete 
+                      name="bookPickupFallback"
+                      placeholder="Pickup Address (e.g. 100 Queen St W)"
+                      required={true}
+                      value={pickupLocation}
+                      onChange={setPickupLocation}
+                    />
                   </div>
                   <div className="app-input-row">
                     <MapPin className="input-icon" size={22} />
-                    {isLoaded && GOOGLE_MAPS_API_KEY ? (
-                      <Autocomplete onPlaceChanged={() => {}} className="w-100">
-                        <input type="text" placeholder="Drop-off Address" required onChange={(e) => setDropoffLocation(e.target.value)} />
-                      </Autocomplete>
-                    ) : (
-                      <input type="text" name="bookDropoffFallback" placeholder="Drop-off Address" required onChange={(e) => setDropoffLocation(e.target.value)} />
-                    )}
+                    <AddressAutocomplete 
+                      name="bookDropoffFallback"
+                      placeholder="Drop-off Address"
+                      required={true}
+                      value={dropoffLocation}
+                      onChange={setDropoffLocation}
+                    />
                   </div>
                   <div className="app-input-row select-row">
                     <Truck className="input-icon" size={22} />
